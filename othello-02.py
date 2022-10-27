@@ -18,7 +18,7 @@ class Othello:
         line_width=4,
         line_color=(0, 0, 0),
         background_color=(255, 255, 255),
-    ):
+        ):
         """Initializes the game"""
 
         # Import and initialize the PyGame library:
@@ -39,7 +39,8 @@ class Othello:
 
         height = round(2 * self.offset + 8 * self.tile_size)
 
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode((width, height),
+                pygame.RESIZABLE)
 
         self.line_width = line_width
 
@@ -69,6 +70,7 @@ class Othello:
         # Fill the PyGame window with white color:
 
         # color = (255, 255, 255)  # white
+
         self.screen.fill(self.background_color)
 
         # Draw the outer square of the board:
@@ -137,7 +139,7 @@ class Othello:
                 # PyGame window was resized:
 
                 if event.type == pygame.VIDEORESIZE:
-                    pass
+                    self.resize(event.w, event.h)
 
                 # User closed the window:
 
@@ -164,6 +166,37 @@ class Othello:
         # Terminate PyGame:
 
         pygame.quit()
+
+    def resize(self, new_width, new_height):
+        print ('New width: ', new_width)
+        print ('New height: ', new_height)
+
+        new_size = min(new_width, new_height)
+        print ('New size: ', new_size)
+
+        if new_size < 200:
+            new_size = 200
+
+        old_size = 2 * self.offset + 8 * self.tile_size
+        print ('Old size: ', old_size)
+
+        ratio = new_size / old_size
+        print ('Ratio: ', ratio)
+
+        print ('self.offset: ', self.offset)
+        self.offset = self.offset * ratio
+        print ('self.offset: ', self.offset)
+
+        print ('self.tile_size: ', self.tile_size)
+        self.tile_size = self.tile_size * ratio
+        print ('self.tile_size: ', self.tile_size)
+
+        new_width = round(2 * self.offset + 8 * self.tile_size)
+        new_height = round(2 * self.offset + 8 * self.tile_size)
+
+        self.screen = pygame.display.set_mode((new_width, new_height),
+                pygame.RESIZABLE)
+        self.draw_board()
 
 
 # Main program:
